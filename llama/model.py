@@ -32,7 +32,7 @@ class ModelArgs:
 
 
 class RMSNorm(torch.nn.Module):
-    def __init__(self, dim: int, eps: float = 1e-6):
+    def __init__(self, dim, eps = 1e-6):
         """
         Initialize the RMSNorm normalization layer.
 
@@ -77,7 +77,7 @@ class RMSNorm(torch.nn.Module):
         return output * self.weight
 
 
-def precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):
+def precompute_freqs_cis(dim, end, theta = 10000.0):
     """
     Precompute the frequency tensor for complex exponentials (cis) with given dimensions.
 
@@ -98,13 +98,13 @@ def precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):
 
     """
     freqs = 1.0 / (theta ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))
-    t = torch.arange(end, device=freqs.device)  # type: ignore
-    freqs = torch.outer(t, freqs).float()  # type: ignore
-    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  # complex64
+    t = torch.arange(end, device=freqs.device)
+    freqs = torch.outer(t, freqs).float()
+    freqs_cis = torch.polar(torch.ones_like(freqs), freqs)
     return freqs_cis
 
 
-def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
+def reshape_for_broadcast(freqs_cis, x):
     """
     Reshape frequency tensor for broadcasting it with another tensor.
 
@@ -130,10 +130,10 @@ def reshape_for_broadcast(freqs_cis: torch.Tensor, x: torch.Tensor):
 
 
 def apply_rotary_emb(
-    xq: torch.Tensor,
-    xk: torch.Tensor,
-    freqs_cis: torch.Tensor,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+    xq,
+    xk,
+    freqs_cis,
+):
     """
     Apply rotary embeddings to input tensors using the given frequency tensor.
 
@@ -161,7 +161,7 @@ def apply_rotary_emb(
     return xq_out.type_as(xq), xk_out.type_as(xk)
 
 
-def repeat_kv(x: torch.Tensor, n_rep: int) -> torch.Tensor:
+def repeat_kv(x, n_rep):
     """torch.repeat_interleave(x, dim=2, repeats=n_rep)"""
     bs, slen, n_kv_heads, head_dim = x.shape
     if n_rep == 1:
@@ -252,10 +252,10 @@ class Attention(nn.Module):
 
     def forward(
         self,
-        x: torch.Tensor,
-        start_pos: int,
-        freqs_cis: torch.Tensor,
-        mask: Optional[torch.Tensor],
+        x,
+        start_pos,
+        freqs_cis,
+        mask,
     ):
         """
         Forward pass of the attention module.
@@ -307,10 +307,10 @@ class Attention(nn.Module):
 class FeedForward(nn.Module):
     def __init__(
         self,
-        dim: int,
-        hidden_dim: int,
-        multiple_of: int,
-        ffn_dim_multiplier: Optional[float],
+        dim,
+        hidden_dim,
+        multiple_of,
+        ffn_dim_multiplier,
     ):
         """
         Initialize the FeedForward module.
@@ -385,10 +385,10 @@ class TransformerBlock(nn.Module):
 
     def forward(
         self,
-        x: torch.Tensor,
-        start_pos: int,
-        freqs_cis: torch.Tensor,
-        mask: Optional[torch.Tensor],
+        x,
+        start_pos,
+        freqs_cis,
+        mask
     ):
         """
         Perform a forward pass through the TransformerBlock.
@@ -459,7 +459,7 @@ class Transformer(nn.Module):
 
 
     @torch.inference_mode()
-    def forward(self, tokens: torch.Tensor, start_pos: int):
+    def forward(self, tokens, start_pos):
         """
         Perform a forward pass through the Transformer model.
 
