@@ -57,18 +57,26 @@ def script_model(ckpt_dir,
               max_seq_len, 
               max_batch_size):
     print("Starting up...")
-    # torch.cuda.reset()
     torch.cuda.empty_cache()
+
     print("Initializing Model...")
     llama = get_model(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size)
+    transformer = llama.model
+    transformer_blocks = transformer.layers
 
     print("Attempting to script model...")
-    scripted_llama = torch.jit.script(llama.model)
-    print("Successfully scripted model!")
+    scripted_blocks = []
+    for transformer_block in transformer_blocks:
+        transformer_block.eval()
+        scripted_block = torch.jit.script(transformer_block)
+        scripted_blocks.append(scripted_block)
+
+    
+    llama.model.layers = torch.nn.ModuleList(scripted_blocks)
+    print("Successfully scripted the transformer blocks of the model!")
     
     print("Saving scripted model...")
-    scripted_llama.save("scripted_llama.pt")
-
+    llama.save("scripted_llama.pt")
 
 if __name__ == "__main__":
     fire.Fire(script_model)
