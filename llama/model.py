@@ -30,7 +30,7 @@ class ModelArgs:
     max_batch_size: int = 32
     max_seq_len: int = 2048
 
-
+@torch.jit.script
 class RMSNorm(torch.nn.Module):
     def __init__(self, dim, eps = 1e-6):
         """
@@ -172,7 +172,7 @@ def repeat_kv(x, n_rep):
         .reshape(bs, slen, n_kv_heads * n_rep, head_dim)
     )
 
-
+@torch.jit.script
 class Attention(nn.Module):
     """Multi-head attention module."""
     def __init__(self, args: ModelArgs):
@@ -303,7 +303,7 @@ class Attention(nn.Module):
         output = output.transpose(1, 2).contiguous().view(bsz, seqlen, -1)
         return self.wo(output)
 
-
+@torch.jit.script
 class FeedForward(nn.Module):
     def __init__(
         self,
@@ -347,7 +347,7 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.w2(F.silu(self.w1(x)) * self.w3(x))
 
-
+@torch.jit.script
 class TransformerBlock(nn.Module):
     def __init__(self, layer_id: int, args: ModelArgs):
         """
@@ -409,7 +409,7 @@ class TransformerBlock(nn.Module):
         out = h + self.feed_forward.forward(self.ffn_norm(h))
         return out
 
-
+@torch.jit.script
 class Transformer(nn.Module):
     def __init__(self, params: ModelArgs):
         """
