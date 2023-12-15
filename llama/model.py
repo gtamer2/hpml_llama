@@ -439,8 +439,8 @@ class Transformer(nn.Module):
         self.tok_embeddings = ParallelEmbedding(
             num_embeddings=params.vocab_size,
             embedding_dim=params.dim, 
-            norm_type=2.0,
-            scale_grad_by_freq=2.0,
+            # norm_type=2.0,
+            # scale_grad_by_freq=2.0,
             init_method=lambda x: x
         )
 
