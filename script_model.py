@@ -63,7 +63,7 @@ def script_model(ckpt_dir,
     llama = get_model(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size)
 
     print("Attempting to script model...")
-    scripted_llama = torch.jit.script(llama)
+    scripted_llama = torch.jit.script(llama.model)
     print("Successfully scripted model!")
     
     print("Saving scripted model...")
