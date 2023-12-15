@@ -52,7 +52,30 @@ def inference(
 
 
 
-def script_model(ckpt_dir, 
+def script_transformer(ckpt_dir, 
+              tokenizer_path, 
+              max_seq_len, 
+              max_batch_size):
+    print("Starting up...")
+    torch.cuda.empty_cache()
+
+    print("Initializing Model...")
+    llama = get_model(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size)
+    transformer = llama.model
+
+    print("Attempting to script model...")
+    scripted_former = torch.jit.script(transformer)
+
+    
+    llama.model = scripted_former
+    print("Successfully scripted the transformer blocks of the model!")
+    
+    print("Saving scripted model...")
+    llama.save("scripted_llama.pt")
+
+
+
+def script_transformer_blocks(ckpt_dir, 
               tokenizer_path, 
               max_seq_len, 
               max_batch_size):
@@ -78,5 +101,6 @@ def script_model(ckpt_dir,
     print("Saving scripted model...")
     llama.save("scripted_llama.pt")
 
+
 if __name__ == "__main__":
-    fire.Fire(script_model)
+    fire.Fire(script_transformer)
