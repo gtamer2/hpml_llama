@@ -76,7 +76,7 @@ class RMSNorm(torch.nn.Module):
         output = self._norm(x.float()).type_as(x)
         return output * self.weight
 
-@torch.jit.script
+# @torch.jit.script
 def precompute_freqs_cis(dim, end, theta = 10000.0):
     """
     Precompute the frequency tensor for complex exponentials (cis) with given dimensions.
@@ -103,7 +103,7 @@ def precompute_freqs_cis(dim, end, theta = 10000.0):
     freqs_cis = torch.polar(torch.ones_like(freqs), freqs)
     return freqs_cis
 
-@torch.jit.script
+# @torch.jit.script
 def reshape_for_broadcast(freqs_cis, x):
     """
     Reshape frequency tensor for broadcasting it with another tensor.
@@ -128,7 +128,7 @@ def reshape_for_broadcast(freqs_cis, x):
     shape = [d if i == 1 or i == ndim - 1 else 1 for i, d in enumerate(x.shape)]
     return freqs_cis.view(*shape)
 
-@torch.jit.script
+# @torch.jit.script
 def apply_rotary_emb(
     xq,
     xk,
@@ -160,7 +160,7 @@ def apply_rotary_emb(
     xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(3)
     return xq_out.type_as(xq), xk_out.type_as(xk)
 
-@torch.jit.script
+# @torch.jit.script
 def repeat_kv(x, n_rep):
     """torch.repeat_interleave(x, dim=2, repeats=n_rep)"""
     bs, slen, n_kv_heads, head_dim = x.shape
