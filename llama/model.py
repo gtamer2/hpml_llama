@@ -409,7 +409,7 @@ class TransformerBlock(nn.Module):
         out = h + self.feed_forward.forward(self.ffn_norm(h))
         return out
 
-@torch.jit.script
+# @torch.jit.script
 class Transformer(nn.Module):
     def __init__(self, params: ModelArgs):
         """
