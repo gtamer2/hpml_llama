@@ -62,16 +62,17 @@ def script_transformer(ckpt_dir,
     print("Initializing Model...")
     llama = get_model(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size)
     transformer = llama.model
+    transformer.eval()
+    with torch.no_grad():
+        print("Attempting to script model...")
+        scripted_former = torch.jit.script(transformer)
 
-    print("Attempting to script model...")
-    scripted_former = torch.jit.script(transformer)
-
-    
-    llama.model = scripted_former
-    print("Successfully scripted the transformer blocks of the model!")
-    
-    print("Saving scripted model...")
-    llama.save("scripted_llama.pt")
+        
+        llama.model = scripted_former
+        print("Successfully scripted the transformer blocks of the model!")
+        
+        print("Saving scripted model...")
+        llama.save("scripted_llama.pt")
 
 
 
