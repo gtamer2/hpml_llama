@@ -1,0 +1,66 @@
+  GNU nano 5.4                        batch_size_8_num_workers_1.txt                                  
+Starting up...
+Building data loaders...
+Initializing Model...
+> initializing model parallel with size 1
+> initializing ddp with size 1
+> initializing pipeline with size 1
+Loaded in 214.69 seconds
+Running inference benchmark...
+
+Working on device: cuda
+Starting BATCH 1 of 5
+Finished Batch 1 of 5
+Batch load time: 0.2947032459778711
+Batch inference time: 5.053673159971368
+Batch total time: 5.348397644003853
+Starting BATCH 2 of 5
+Finished Batch 2 of 5
+Batch load time: 0.31525800796225667
+Batch inference time: 4.510705474007409
+Batch total time: 4.825979086046573
+Starting BATCH 3 of 5
+Finished Batch 3 of 5
+Batch load time: 0.33947563800029457
+Batch inference time: 4.500022558029741
+Batch total time: 4.83951427397551
+Starting BATCH 4 of 5
+Finished Batch 4 of 5
+Batch load time: 0.3513201259775087
+Batch inference time: 4.579292877984699
+Batch total time: 4.930629512004089
+Starting BATCH 5 of 5
+Finished Batch 5 of 5
+Batch load time: 0.3812956170295365
+Batch inference time: 4.531141248007771
+Batch total time: 4.912454038974829
+
+
+ Manual Profile Results...
+Data-loading times
+> per epoch:  tensor([0.2947, 0.3152, 0.3394, 0.3513, 0.3813])
+> average:  tensor(0.3364)
+
+Inference time for each epoch
+> per epoch tensor([5.0547, 4.5117, 4.5000, 4.5781, 4.5312])
+> average tensor(4.6367)
+
+Total time for each epoch
+> per epoch tensor([5.3477, 4.8242, 4.8398, 4.9297, 4.9141])
+> average tensor(4.9727)
+
+
+
+Profiling sorted by CUDA time total
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                                   Name    Self CPU %      Self CPU   CPU total %    >
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                          run_benchmark        31.52%        7.837s       100.00%    >
+                                           aten::matmul         3.43%     853.415ms        20.83%    >
+                                               aten::mm         9.67%        2.403s        12.36%    >
+                                           aten::linear         1.22%     304.217ms        18.14%    >
+void gemv2T_kernel_val<int, int, __half, __half, __h...         0.00%       0.000us         0.00%    >
+void gemv2T_kernel_val<int, int, __half, float, floa...         0.00%       0.000us         0.00%    >
+                                          [ Read 91 lines ]
+^G Help       ^O Write Out  ^W Where Is   ^K Cut        ^T Execute    ^C Location   M-U Undo
+^X Exit       ^R Read File  ^\ Replace    ^U Paste      ^J Justify    ^_ Go To Line M-E Redo
