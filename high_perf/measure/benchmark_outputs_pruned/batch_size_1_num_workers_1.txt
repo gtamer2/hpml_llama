@@ -1,0 +1,60 @@
+Starting BATCH 5 of 5
+Finished Batch 5 of 5
+Batch load time: 0.10030351602472365
+Batch inference time: 4.507589685963467
+Batch total time: 4.607908916019369
+
+
+ Manual Profile Results...
+Data-loading times
+> per epoch:  tensor([0.1019, 0.0816, 0.0894, 0.0944, 0.1003])
+> average:  tensor(0.0935)
+
+Inference time for each epoch
+> per epoch tensor([5.1953, 4.6289, 4.6094, 4.5234, 4.5078])
+> average tensor(4.6914)
+
+Total time for each epoch
+> per epoch tensor([5.2969, 4.7109, 4.6992, 4.6172, 4.6094])
+> average tensor(4.7852)
+
+
+
+Profiling sorted by CUDA time total
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                                   Name    Self CPU %      Self CPU   CPU total %    >
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                          run_benchmark        28.50%        6.820s       100.00%    >
+                                           aten::matmul         3.63%     869.714ms        21.51%    >
+                                               aten::mm         9.86%        2.359s        12.60%    >
+                                           aten::linear         1.38%     331.268ms        18.80%    >
+void gemv2T_kernel_val<int, int, __half, __half, __h...         0.00%       0.000us         0.00%    >
+void gemv2T_kernel_val<int, int, __half, float, floa...         0.00%       0.000us         0.00%    >
+                                       cudaLaunchKernel        12.20%        2.920s        12.20%    >
+                                            aten::copy_         4.34%        1.039s         8.49%    >
+                                         aten::_to_copy         2.83%     676.946ms        12.60%    >
+                                               aten::to         1.26%     301.191ms        13.53%    >
+-------------------------------------------------------  ------------  ------------  ------------  -->
+Self CPU time total: 23.934s
+Self CUDA time total: 13.889s
+
+
+
+
+Profiling sorted by CUDA memory usage
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                                   Name    Self CPU %      Self CPU   CPU total %    >
+-------------------------------------------------------  ------------  ------------  ------------  -->
+                                    aten::empty_strided         3.22%     769.961ms         3.22%    >
+                                              aten::mul         4.05%     969.712ms         5.91%    >
+                                               aten::mm         9.86%        2.359s        12.60%    >
+                                              aten::pow         1.46%     348.442ms         1.99%    >
+                                             aten::silu         0.62%     147.726ms         0.94%    >
+                                              aten::add         2.79%     667.454ms         4.03%    >
+                                             aten::sort         0.09%      21.678ms         0.20%    >
+                                              aten::bmm         2.45%     585.571ms         3.19%    >
+                                         aten::_softmax         0.58%     139.090ms         0.85%    >
+                                              aten::div         0.81%     193.964ms         1.15%    >
+-------------------------------------------------------  ------------  ------------  ------------  -->
+Self CPU time total: 23.934s
+Self CUDA time total: 13.889s
