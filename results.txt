@@ -1,0 +1,19 @@
+Out of 20 questions:
+Pruned:
+BLEURT acc, bleu acc,   rouge1 acc
+0.65        ,0.3,       0.35
+
+Non-pruned:
+ BLEURT acc  bleu acc  rouge1 acc
+        0.5       0.5        0.55
+
+Bleu and Rouge1 accuracy got worse with pruning, but BLEURT accuracy got better.
+
+BLEURT = "It takes a pair of sentences as input, a reference and a candidate, 
+and it returns a score that indicates to what extent the candidate is fluent 
+and conveys the meaning of the reference."
+Taken directly from https://github.com/google-research/bleurt
+
+Sparsity potentially got too extreme and made the model perform worse on the bleu/rouge1 accuracies.
+
+
